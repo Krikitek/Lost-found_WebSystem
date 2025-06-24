@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Manage Items</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="user_style.css" />
+  <style>
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .item-card {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    .status-open { color: green; font-weight: bold; }
+    .status-claimed { color: blue; font-weight: bold; }
+    .status-unclaimed { color: orange; font-weight: bold; }
+    .status-in-progress { color: darkmagenta; font-weight: bold; }
+    .status-done { color: gray; font-weight: bold; }
+
+.comments-section {
+  display: none;
+  position: relative;
+  background: #f8f8f8;
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;       /* full width of the parent */
+  box-sizing: border-box; /* include padding in width */
+  border-radius: 6px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.comment-entry {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;               /* full width */
+  box-sizing: border-box;    /* include padding and border in width */
+}
+
+.comment-entry input {
+  flex: 1;                  /* input takes all remaining space */
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+#comment-input-5 {
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+.comment-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.comment-entry input {
+  flex-grow: 1;          /* input takes all available space */
+  min-width: 0;          /* allows shrinking in flex container */
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.comment-entry button {
+  flex-shrink: 0;        /* button keeps its natural size */
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;           /* fixed width so it’s not too big */
+  height: 32px;
+}
+
+.comment-entry button img {
+  width: 100%;           /* make the arrow icon fill the button */
+  height: auto;
+}
+
+    .comment-button-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .comment-button-container button {
+      font-size: 16px;
+      font-weight: bold;
+      background-color: green;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .status-text {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #28a745; /* green color, customize as needed */
+}
+
+.status-open { color: #007bff; }       /* blue */
+.status-claimed { color: #28a745; }    /* green */
+.status-unclaimed { color: #dc3545; }  /* red */
+.status-inprogress { color: #ffc107; } /* yellow/orange */
+.status-done { color: #6c757d; }       /* gray */
+
+    .comment-button-container button:hover {
+      background-color: darkgreen;
+    }
+
+    .comment-entry {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .comment-entry input {
+      flex: 1;
+      padding: 5px;
+    }
+
+    .comment-entry button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .comment-entry img {
+      width: 24px;
+    }
+  </style>
+</head>
+<body>
+<nav>
+  <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px 20px; background-color: #006400;">
+    <div style="display: flex; align-items: center;">
+      <img src="DLSL_Official_logo.png" alt="DLSL Logo" style="height: 50px; margin-right: 15px;">
+      <h2 style="color: white; margin: 0; font-size: 20px;">Welcome to DLSL Lost & Found Tracker</h2>
+    </div>
+
+    <!-- Right side container -->
+    <div style="display: flex; align-items: center; gap: 20px;">
+      <!-- Avatar + Username stacked -->
+      <div style="display: flex; flex-direction: column; align-items: center; color: white; font-weight: bold; font-size: 14px;">
+        <img src="avatar.png" alt="Avatar Logo" style="height: 50px; border-radius: 50%; margin-bottom: 5px;">
+        <span id="usernameDisplay" style="margin: 0;">User</span>
+      </div>
+
+      <!-- Logout button -->
+      <div>
+        <h1 style="color: white; margin: 0; cursor: pointer;" class="logout-btn" onclick="logout()">Log out</h1>
+      </div>
+    </div>
+  </div>
+</nav>
+
+  <section style="padding: 20px;">
+    <a href="user.html"><button style="font-weight: bolder;">Back to Home</button></a>
+    <h2>Lost & Found Items</h2>
+
+    <div class="filter-bar">
+      <select id="filterType">
+        <option value="">All Types</option>
+        <option value="lost">Lost</option>
+        <option value="found">Found</option>
+      </select>
+
+      <select id="filterStatus">
+        <option value="">All Status</option>
+        <option value="open">Open</option>
+        <option value="claimed">Claimed</option>
+        <option value="unclaimed">Unclaimed</option>
+        <option value="in progress">In Progress</option>
+        <option value="done">Done</option>
+      </select>
+
+      <button onclick="loadItems()">Apply Filters</button>
+    </div>
+
+    <div id="itemsContainer"></div>
+  </section>
+
+  <script>
+    function getStatusClass(status) {
+      switch (status.toLowerCase()) {
+        case 'open': return 'status-open';
+        case 'claimed': return 'status-claimed';
+        case 'unclaimed': return 'status-unclaimed';
+        case 'in progress': return 'status-in-progress';
+        case 'done': return 'status-done';
+        default: return '';
+      }
+    }
+
+    function loadItems() {
+      Promise.all([
+        fetch('/api/users').then(res => res.json()),
+        fetch('/api/comments').then(res => res.json()),
+        fetch('/api/items').then(res => res.json())
+      ])
+      .then(([usersData, commentsData, itemsData]) => {
+        const users = usersData.users;
+        const comments = commentsData.itemcomments;
+        const items = itemsData.items;
+
+        const typeFilter = document.getElementById('filterType').value;
+        const statusFilter = document.getElementById('filterStatus').value;
+
+const filtered = items.filter(item => {
+  return (!typeFilter || item.type === typeFilter) &&
+         (!statusFilter || item.status.toLowerCase() === statusFilter.toLowerCase());
+});
+
+// Sort by date descending (most recent first)
+filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+const container = document.getElementById('itemsContainer');
+container.innerHTML = '';
+
+        [...filtered].reverse().forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'item-card';
+
+          const itemComments = comments.filter(c => c.itemId === item.id);
+          const commentHtml = itemComments.map(c => {
+            const reporter = users.find(u => u.userId == c.reporterId);
+            const reporterName = reporter ? reporter.username : 'Unknown';
+            return `<p><strong>${reporterName}:</strong> ${c.comment}</p>`;
+          }).join('');
+
+          div.innerHTML = `
+            ${item.image
+              ? `<img src="${item.image}" alt="${item.name}" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" />`
+              : `<p style="text-align: center; color: gray; font-size: 20px;"><em>No Image Provided</em></p>`}
+            <strong>${item.name}</strong> <br>
+            <small><em>${item.location} - ${item.date}</em></small><br>
+            <p>${item.description}</p>
+            <p><strong>Status:</strong> <span class="${getStatusClass(item.status)}">${item.status}</span></p>
+            <p><strong>Reported By:</strong> ${item.reportedBy}</p>
+
+            <div class="comment-button-container">
+              <button onclick="toggleComments('comments-${item.id}')">Show Comments</button>
+            </div>
+
+            <div id="comments-${item.id}" class="comments-section">
+              ${commentHtml || '<em>No comments yet.</em>'}
+              <div class="comment-entry">
+                <input id="comment-input-${item.id}" type="text" placeholder="Add Comment">
+                <button onclick="submitComment(${item.id})"><img src="enter arrow.png" alt="Enter"></button>
+              </div>
+            </div>
+          `;
+
+          container.appendChild(div);
+        });
+      })
+      .catch(err => {
+        console.error('Error loading items:', err);
+      });
+    }
+
+    function submitComment(itemId) {
+      const input = document.getElementById(`comment-input-${itemId}`);
+      const commentText = input.value.trim();
+      const reporterId = localStorage.getItem('userId');
+      const reporterName = localStorage.getItem('username');
+
+      if (!commentText || !reporterId) {
+        alert('Error: No comment or missing reporter ID!');
+        return;
+      }
+
+      fetch('/api/addComment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          itemId,
+          comment: commentText,
+          reporterId: parseInt(reporterId)
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          const commentSection = document.getElementById(`comments-${itemId}`);
+          const emptyMsg = commentSection.querySelector('em');
+          if (emptyMsg) emptyMsg.remove();
+
+          const newComment = document.createElement('p');
+          newComment.innerHTML = `<strong>${reporterName}:</strong> ${commentText}`;
+          commentSection.insertBefore(newComment, commentSection.querySelector('.comment-entry'));
+
+          input.value = '';
+        } else {
+          alert('Failed to add comment');
+        }
+      })
+      .catch((err) => {
+        console.error('Request failed:', err);
+        alert('Error sending request');
+      });
+    }
+
+    function toggleComments(id) {
+      const section = document.getElementById(id);
+      section.style.display = (section.style.display === 'none' || section.style.display === '') ? 'block' : 'none';
+    }
+
+    window.onload = () => {
+      if (document.referrer === "" || localStorage.length === 0) {
+        window.location.href = "/index.html";
+      }
+
+      const username = localStorage.getItem('username');
+      if (username) {
+        document.getElementById('usernameDisplay').textContent = username;
+      }
+
+      loadItems();
+    };
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = "/index.html";
+    }
+  </script>
+</body>
+</html>

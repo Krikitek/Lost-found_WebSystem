@@ -1,0 +1,76 @@
+{
+  "itemcomments": [
+    {
+      "id": 1,
+      "itemId": 1,
+      "comment": "Plain black umbrella with wooden handle",
+      "reporterId": 2
+    },
+    {
+      "id": 2,
+      "itemId": 5,
+      "comment": "Bakit nagdadala ng kawali sa school?",
+      "reporterId": 4
+    },
+    {
+      "id": 3,
+      "itemId": 3,
+      "comment": "Nasasanla ba ito?",
+      "reporterId": 4
+    },
+    {
+      "id": 4,
+      "itemId": 2,
+      "comment": "Akin ito, please pa deliver sa mindoro.",
+      "reporterId": 4
+    },
+    {
+      "id": 5,
+      "itemId": 1,
+      "comment": "galing mag english ah",
+      "reporterId": 4
+    },
+    {
+      "id": 6,
+      "itemId": 5,
+      "comment": "kaya nga pre, magluluto siguro sa riles",
+      "reporterId": 1
+    },
+    {
+      "id": 7,
+      "itemId": 4,
+      "comment": "Nakuha na ni carlos ang pera sa malamang.",
+      "reporterId": 1
+    },
+    {
+      "id": 8,
+      "itemId": 3,
+      "comment": "peke ata ito pre.",
+      "reporterId": 1
+    },
+    {
+      "id": 9,
+      "itemId": 2,
+      "comment": "Wag na, bili ka nalang bago",
+      "reporterId": 1
+    },
+    {
+      "id": 10,
+      "itemId": 1,
+      "comment": "Baka ken yan",
+      "reporterId": 1
+    },
+    {
+      "id": 11,
+      "itemId": 5,
+      "comment": "dwad",
+      "reporterId": 1
+    },
+    {
+      "id": 12,
+      "itemId": 6,
+      "comment": "nawawala buhay",
+      "reporterId": 6
+    }
+  ]
+}

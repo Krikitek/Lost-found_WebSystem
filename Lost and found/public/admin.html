@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lost & Found Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    /* Background image for the whole page */
+    body {
+      background: url('background-image.jpg') no-repeat center center fixed;
+      background-size: cover;
+      min-height: 100vh;
+    }
+
+    /* Navbar styling from your reference */
+    nav.navbar {
+      background-color: #198754; /* Bootstrap bg-success green */
+      padding: 0.5rem 1rem;
+    }
+
+    .navbar-brand h2 {
+      color: white;
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .navbar-nav {
+      margin-left: auto;
+      margin-right: auto;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .nav-link {
+      color: white !important;
+      font-weight: 500;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.375rem;
+      transition: background-color 0.3s;
+    }
+
+    .nav-link:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: white !important;
+    }
+
+    .nav-link.active {
+      border: 2px solid black;
+      background-color: white;
+      color: black !important;
+    }
+
+    .avatar-section {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .avatar-section img {
+      height: 50px;
+      border-radius: 0.375rem;
+    }
+
+    .avatar-section .username {
+      color: white;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    /* Main container styling */
+    section.container {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      margin-top: 2rem;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <!-- Brand -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="DLSL_Official_logo.png" alt="Logo" height="50" class="me-2" />
+      <h2>Lost & Found Tracker</h2>
+    </a>
+
+    <!-- Nav Links -->
+    <div class="collapse navbar-collapse justify-content-center">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link active" href="admin.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="post_lost_item.html">Post Lost</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="post_found_item.html">Post Found</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="manage_items.html">Manage Items</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Avatar & Logout -->
+    <div class="avatar-section">
+      <img src="avatar.png" alt="Avatar" />
+      <span class="username" id="usernameDisplay">Admin</span>
+      <button class="btn btn-outline-light btn-sm" onclick="logout()">Log out</button>
+    </div>
+  </div>
+</nav>
+
+<div id="popupAd" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  height: 250px;
+  background-color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+">
+  <button id="closePopupBtn" style="
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    font-size: 22px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+  " title="Close">&times;</button>
+  <img id="popupAdImage" src="cheez1.png" alt="Ad Image" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+</div>
+
+<!-- Main Section -->
+<section class="container my-4">
+  <h2>Dashboard Overview</h2>
+  <div class="row g-3">
+    
+    <!-- Quick Stats -->
+    <div class="col-md-4">
+      <div class="bg-light p-4 rounded shadow-sm">
+        <h4 class="text-success">Quick Stats</h4>
+        <p id="totalReports">Total Lost Reports: ...</p>
+      </div>
+    </div>
+
+    <!-- Recent Reports -->
+    <div class="col-md-8">
+      <div class="bg-light p-4 rounded shadow-sm">
+        <h4 class="text-success">Recent Lost Reports</h4>
+        <ul id="recentItemsList" class="list-unstyled mb-0"></ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  // Load username from localStorage
+  const username = localStorage.getItem('username') || 'Admin';
+  document.getElementById('usernameDisplay').textContent = username.toUpperCase();
+
+  fetch('/api/items?type=Lost')
+    .then(res => res.json())
+    .then(data => {
+      const items = data.items || [];
+      document.getElementById('totalReports').textContent = `Total Lost Reports: ${items.length}`;
+
+      const list = document.getElementById('recentItemsList');
+      list.innerHTML = '';
+
+      const sorted = items.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+      sorted.forEach(item => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <div class="d-flex flex-column position-relative border-start border-4 border-success bg-white p-3 mb-3 rounded shadow-sm">
+            ${
+              item.image
+                ? `<img src="${item.image}" alt="${item.name}" class="position-absolute" style="top: 10px; right: 10px; max-width: 100px; height: auto;">`
+                : `<p class="position-absolute text-muted" style="top: 10px; right: 10px;"><em>No Image</em></p>`
+            }
+            <strong>${item.name}</strong>
+            <em>${item.location}</em> — ${item.date}<br>
+            <small class="text-muted">${item.status}</small>
+          </div>
+        `;
+        list.appendChild(li);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching lost items:', error);
+    });
+
+  function logout() {
+    if (confirm('Are you sure you want to log out?')) {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  }
+
+  if (document.referrer === "" || localStorage.length === 0) {
+    window.location.href = "/index.html";
+  }
+  (function(){
+    const images = ['cheez1.png', 'cheez2.png', 'cheez3.png'];
+    let currentIndex = 0;
+
+    const popup = document.getElementById('popupAd');
+    const img = document.getElementById('popupAdImage');
+    const closeBtn = document.getElementById('closePopupBtn');
+
+    // Cycle images every 3 seconds
+    const cycleInterval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % images.length;
+      img.src = images[currentIndex];
+    }, 3000);
+
+    // Close button hides the popup and stops cycling
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      popup.style.display = 'none';
+      clearInterval(cycleInterval);
+    });
+
+    // Optional: clicking popup also closes it
+    // popup.addEventListener('click', () => {
+    //   popup.style.display = 'none';
+    //   clearInterval(cycleInterval);
+    // });
+  })();
+</script>
+
+</body>
+</html>

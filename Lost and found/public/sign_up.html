@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Report Lost Item</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px 20px; background-color: #006400;">
+      
+      <div style="display: flex; align-items: center; flex: 1 1 200px; min-width: 200px;">
+        <img src="DLSL_Official_logo.png" alt="DLSL Logo" style="height: 50px; margin-right: 15px;">
+        <h2 style="color: white; margin: 0;">Welcome to DLSL Lost & Found Tracker</h2>
+      </div>
+  
+    </div>
+  </nav>
+
+<section style="display: flex; align-items: center; flex-direction: column; position: relative;">
+  <div style="width: 97%; position: absolute;" >
+  <img src="return button.png" alt="DLSL Logo" style="height: 40px; cursor: pointer;" onclick="window.location.href='index.html'">
+  </div>
+  <img src="DLSL_Official_logo.png" alt="DLSL Logo" style="height: 250px;">
+  <h2>DLSL Lost & Found Tracker</h2>
+  <form onsubmit="submitSignup(event)" style="display: flex; flex-wrap: wrap; align-items: center; flex-direction: column; justify-content: center; font-weight: bold;">
+    
+    <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; ">
+    <label>UserName</label>
+    <input style="width: 60%; border-width: thick;" id="username" placeholder="Enter UserName" required />
+    </div>
+
+    <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between;">
+    <label>Password</label>
+    <input  style="width: 60%; border-width: thick;" type="password" id="password" placeholder="Enter Password" required />
+    </div>
+
+    <div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; margin-top: -15px;">
+    <label style="color: white;">Password</label>
+    <input  style="width: 60%; border-width: thick;" type="password" id="re-password" placeholder="Re-Enter Password" required />
+    </div>
+     
+    <div style="display: flex; flex-direction: row; justify-content: center; width: 350px; margin-top: 30px;">
+    <button type="submit" style="font-weight: bold; width: 100%;">Sign Up</button>
+    </div>
+  </form>
+</section>
+
+<script>
+function submitSignup(event) {
+  event.preventDefault();
+
+  const username = document.getElementById('username').value.trim();
+  const password = document.getElementById('password').value.trim();
+  const confirmPassword = document.getElementById('re-password').value.trim();
+
+  if (!username || !password || !confirmPassword) {
+    alert('Please fill in all fields.');
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert('Passwords do not match. Please re-enter.');
+    return;
+  }
+
+  if (username == 'Admin'||username == 'admin'||username == 'ADMIN') {
+    alert('You Cannot Create An Admin Account!');
+    return;
+  }
+
+  const credentials = { username, password };
+
+  fetch('/api/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(credentials)
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) {
+        alert(`Username "${username}" is already taken.`);
+      } else {
+        alert(data.message);
+        window.location.href = '/index.html';
+      }
+    })
+    .catch(err => {
+      alert('Something went wrong. Please try again.');
+      console.error(err);
+    });
+}
+</script>
+</body>
+</html>

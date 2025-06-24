@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Report Found Item</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .navbar-brand h2 {
+      color: white;
+      margin: 0;
+    }
+    .nav-link.active {
+      border: 2px solid black;
+    }
+    .preview-img {
+      max-width: 300px;
+      max-height: 300px;
+      display: none;
+      margin-top: 10px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .form-label {
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-success px-4 py-2">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="DLSL_Official_logo.png" alt="Logo" height="50" class="me-2">
+      <h2 class="fs-4">Lost & Found Tracker</h2>
+    </a>
+
+    <div class="collapse navbar-collapse justify-content-center">
+      <ul class="navbar-nav mb-2 mb-lg-0">
+        <li class="nav-item mx-2">
+          <a class="nav-link" href="admin.html">Dashboard</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link" href="post_lost_item.html">Post Lost</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link active" href="post_found_item.html">Post Found</a>
+        </li>
+        <li class="nav-item mx-2">
+          <a class="nav-link" href="manage_items.html">Manage Items</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="d-flex align-items-center">
+      <img src="avatar.png" alt="Avatar" height="50" class="me-2">
+      <span class="text-white fw-bold me-3" id="usernameDisplay">Admin</span>
+      <button class="btn btn-outline-light" onclick="logout()">Log out</button>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Post a Found Item</h2>
+  <form onsubmit="submitFoundItem(event)">
+    <div class="mb-3">
+      <label for="name" class="form-label">Item Name</label>
+      <input type="text" id="name" class="form-control" required />
+    </div>
+    <div class="mb-3">
+      <label for="location" class="form-label">Location Found</label>
+      <input type="text" id="location" class="form-control" required />
+    </div>
+    <div class="mb-3">
+      <label for="date" class="form-label">Date</label>
+      <input type="date" id="date" class="form-control" required />
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Description</label>
+      <textarea id="description" class="form-control" rows="3" required></textarea>
+    </div>
+    <div class="mb-3">
+      <label for="image" class="form-label">Upload Item Image</label>
+      <input type="file" id="image" accept="image/*" class="form-control" />
+    </div>
+    <img id="imagePreview" class="preview-img rounded shadow" />
+    <div class="text-center mt-4">
+      <button type="submit" class="btn btn-success px-4">Submit Found Report</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  document.getElementById('image').addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('imagePreview');
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
+    } else {
+      preview.style.display = 'none';
+    }
+  });
+
+  const username = localStorage.getItem('username');
+  if (username) {
+    document.getElementById('usernameDisplay').textContent = username.toUpperCase();
+  }
+
+  function submitFoundItem(event) {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name', document.getElementById('name').value);
+    formData.append('location', document.getElementById('location').value);
+    formData.append('date', document.getElementById('date').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('image', document.getElementById('image').files[0]);
+    formData.append('username', username);
+
+    fetch('/api/report-found', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      alert('Found item reported successfully!');
+      window.location.reload();
+    })
+    .catch(err => {
+      alert('Error submitting item.');
+      console.error(err);
+    });
+  }
+
+  function logout() {
+    if (confirm('Are you sure you want to log out?')) {
+      localStorage.clear();
+      window.location.href = 'index.html';
+    }
+  }
+
+  if (document.referrer === "" || localStorage.length === 0) {
+    window.location.href = "/index.html";
+  }
+</script>
+
+</body>
+</html>

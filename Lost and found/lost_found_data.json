@@ -1,0 +1,70 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "type": "Lost",
+      "name": "Black Umbrella",
+      "location": "Library",
+      "date": "2025-05-20",
+      "description": "Plain black umbrella with wooden handle",
+      "status": "unclaimed",
+      "reportedBy": "Bugoy",
+      "image": "black umbrella.png"
+    },
+    {
+      "id": 2,
+      "type": "Found",
+      "name": "Blue Water Bottle",
+      "location": "Gym",
+      "date": "2025-05-21",
+      "description": "Blue tumbler with a sticker on it",
+      "status": "unclaimed",
+      "reportedBy": "Chano",
+      "image": "blue waterbottle.png"
+    },
+    {
+      "id": 3,
+      "type": "Lost",
+      "name": "Key Chain",
+      "location": "Room 204",
+      "date": "2025-05-18",
+      "description": "Gold",
+      "status": "in progress",
+      "reportedBy": "Ken",
+      "image": "gold key chain.png"
+    },
+    {
+      "id": 4,
+      "type": "Found",
+      "name": "Black Wallet",
+      "location": "Cafeteria",
+      "date": "2025-05-19",
+      "description": "Contains student ID and receipts",
+      "status": "unclaimed",
+      "reportedBy": "Carlos",
+      "image": "black wallet.png"
+    },
+    {
+      "id": 5,
+      "type": "Lost",
+      "name": "Cast Iron Pan",
+      "location": "United States",
+      "date": "2025-05-07",
+      "description": "Black cast iron pan",
+      "status": "claimed",
+      "reportedBy": "Bugoy",
+      "image": "/uploads/1748524394022_cast iron pan.jpg"
+    },
+    {
+      "id": 6,
+      "name": "Life",
+      "location": "MB 301",
+      "date": "2025-05-31",
+      "description": "Sir Rey is lost",
+      "status": "unclaimed",
+      "type": "lost",
+      "reportedBy": "admin",
+      "image": "/uploads/1748668204179_cast iron pan.jpg"
+    }
+  ]
+}

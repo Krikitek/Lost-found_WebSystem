@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manage Items</title>
+  
+  <!-- Bootstrap CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  
+  <style>
+    .item-card {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+
+    
+.comments-section {
+  display: none;
+  position: relative;
+  background: #f8f8f8;
+  padding: 10px;
+  margin-top: 10px;
+  width: 100%;       /* full width of the parent */
+  box-sizing: border-box; /* include padding in width */
+  border-radius: 6px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.comment-entry {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  width: 100%;               /* full width */
+  box-sizing: border-box;    /* include padding and border in width */
+}
+
+.comment-entry input {
+  flex: 1;                  /* input takes all remaining space */
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+#comment-input-5 {
+  width: 100% !important;
+  box-sizing: border-box;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+.btn-apply-filters {
+  background-color: #28a745;  /* example green */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.comment-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.status-text {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #28a745; /* green color, customize as needed */
+}
+
+.comment-entry input {
+  flex-grow: 1;          /* input takes all available space */
+  min-width: 0;          /* allows shrinking in flex container */
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.comment-entry button {
+  flex-shrink: 0;        /* button keeps its natural size */
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;           /* fixed width so it’s not too big */
+  height: 32px;
+}
+
+.comment-entry button img {
+  width: 100%;           /* make the arrow icon fill the button */
+  height: auto;
+}
+
+    .comment-button-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .comment-button-container button {
+      font-size: 16px;
+      font-weight: bold;
+      background-color: green;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .comment-button-container button:hover {
+      background-color: darkgreen;
+    }
+
+    .comment-entry {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .comment-entry input {
+      flex: 1;
+      padding: 5px;
+    }
+
+    .comment-entry button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .comment-entry img {
+      width: 24px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-success px-4">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="DLSL_Official_logo.png" alt="DLSL Logo" style="height: 50px; margin-right: 15px;">
+      <h2 class="m-0 text-white">Lost & Found Tracker</h2>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+      <ul class="navbar-nav gap-4">
+        <li class="nav-item">
+          <a class="nav-link" href="admin.html">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="post_lost_item.html">Post Lost</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="post_found_item.html">Post Found</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active border border-3 border-dark rounded px-3" href="manage_items.html">Manage Items</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="d-flex align-items-center gap-3">
+      <div class="text-center text-white">
+        <img src="avatar.png" alt="Avatar Logo" class="rounded-circle" style="height: 50px;">
+        <div class="fw-bold">Admin</div>
+      </div>
+      <button class="btn btn-outline-light" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+  <div id="popupAd" style="
+  position: fixed;
+  top: 50%;
+  left: 50%;
+      scale:175%;
+  transform: translate(-50%, -50%);
+  width: 320px;
+  height: 280px;
+  background-color: white;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  border-radius: 12px;
+  overflow: hidden;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+">
+  <button id="closePopupBtn" style="
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    line-height: 1;
+  " title="Close">&times;</button>
+  <img id="popupAdImage" src="cheez1.png" alt="Ad Image" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+</div>
+
+  <main class="container my-4">
+    <section>
+      <h2 class="mb-4">Manage Lost & Found Items</h2>
+
+      <div class="filter-bar d-flex flex-wrap gap-3 mb-4 align-items-center">
+        <select id="filterType" class="form-select w-auto">
+          <option value="">All Types</option>
+          <option value="lost">Lost</option>
+          <option value="found">Found</option>
+        </select>
+
+        <select id="filterStatus" class="form-select w-auto">
+          <option value="">All Status</option>
+          <option value="open">Open</option>
+          <option value="claimed">Claimed</option>
+          <option value="unclaimed">Unclaimed</option>
+          <option value="in progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+
+        <button class="btn btn-success" onclick="loadItems()">Apply Filters</button>
+      </div>
+
+      <div id="itemsContainer" style="position: relative;"></div>
+    </section>
+  </main>
+
+  <!-- Bootstrap JS Bundle CDN (includes Popper) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function loadItems() {
+      Promise.all([
+        fetch('/api/users').then(res => res.json()),
+        fetch('/api/comments').then(res => res.json()),
+        fetch('/api/items').then(res => res.json())
+      ])
+      .then(([usersData, commentsData, itemsData]) => {
+        const users = usersData.users;
+        const comments = commentsData.itemcomments;
+        const items = itemsData.items;
+
+        const typeFilter = document.getElementById('filterType').value;
+        const statusFilter = document.getElementById('filterStatus').value;
+
+        const filtered = items.filter(item => {
+          return (!typeFilter || item.type === typeFilter) &&
+                 (!statusFilter || item.status === statusFilter);
+        });
+
+        const container = document.getElementById('itemsContainer');
+        container.innerHTML = '';
+
+        [...filtered].reverse().forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'item-card';
+
+          const itemComments = comments.filter(c => c.itemId === item.id);
+          const commentHtml = itemComments.map(c => {
+            const reporter = users.find(u => u.userId == c.reporterId);
+            const reporterName = reporter ? reporter.username : 'Unknown';
+            return `<p><strong>${reporterName}:</strong> ${c.comment}</p>`;
+          }).join('');
+
+div.innerHTML = `
+  ${item.image
+    ? `<img src="${item.image}" alt="${item.name}" style="max-width: 50%; height: auto; display: block; margin-left: auto; margin-right: auto;" /><br>`
+    : `<p style="text-align: center; color: gray; font-size: 30px;"><em>No Image Provided</em></p>`}
+  <strong>${item.name}</strong><br>
+  <small><em>${item.location} - ${item.date}</em></small><br>
+  <p>${item.description}</p>
+  <p><strong>Status:</strong> <span id="status-text-${item.id}">${item.status}</span></p>
+  <p><strong>Reported By:</strong> ${item.reportedBy}</p>
+  <div class="item-actions">
+    <select id="status-select-${item.id}" class="btn-edit-status" style="display:none;">
+      <option value="open">Open</option>
+      <option value="claimed">Claimed</option>
+      <option value="unclaimed">Unclaimed</option>
+      <option value="in progress">In Progress</option>
+      <option value="done">Done</option>
+    </select>
+<button 
+  id="edit-btn-${item.id}" 
+  style="background-color: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;" 
+  onclick="showStatusSelector(${item.id})">
+  Edit Status
+</button>
+<button 
+  id="save-btn-${item.id}" 
+  style="display:none; background-color: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;" 
+  onclick="saveStatus(${item.id})">
+  Save
+</button>
+
+ <button 
+  onclick="toggleComments('comments-${item.id}')" 
+  style="background-color: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+  View Comments
+</button>
+  </div>
+
+  <div id="comments-${item.id}" 
+       class="comments-section" 
+       style="display: none; margin-top: 20px; margin-bottom: 20px; max-height: 200px; overflow-y: auto; background: #f8f8f8; border-radius: 5px; box-shadow: 0px 2px 8px rgba(0,0,0,0.2); padding: 15px; width: 100%;">
+    ${commentHtml || '<em>No comments yet.</em>'}
+    <input id="comment-input-${item.id}" style="width: 70%; margin-top: 10px;" type="text" placeholder="Add Comment">
+    <button onclick="submitComment(${item.id})" style="width: 50px; background-color: white; margin-top: 10px; cursor: pointer;">
+      <img style="width: 60%;" src="enter arrow.png" alt="enter">
+    </button>
+  </div>
+`;
+
+
+          container.appendChild(div);
+
+          // Set dropdown default value to current status
+          const select = document.getElementById(`status-select-${item.id}`);
+          if (select) {
+            select.value = item.status;
+          }
+        });
+      })
+      .catch(err => {
+        console.error('Error loading items:', err);
+      });
+    }
+
+    function showStatusSelector(itemId) {
+      document.getElementById(`status-select-${itemId}`).style.display = 'inline-block';
+      document.getElementById(`save-btn-${itemId}`).style.display = 'inline-block';
+      document.getElementById(`edit-btn-${itemId}`).style.display = 'none';
+    }
+
+    function saveStatus(itemId) {
+      const select = document.getElementById(`status-select-${itemId}`);
+      const newStatus = select.value;
+
+      fetch(`/api/item/${itemId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus })
+      })
+        .then(res => res.json())
+        .then(() => {
+          alert('Item status updated!');
+          document.getElementById(`status-text-${itemId}`).textContent = newStatus;
+          select.style.display = 'none';
+          document.getElementById(`save-btn-${itemId}`).style.display = 'none';
+          document.getElementById(`edit-btn-${itemId}`).style.display = 'inline-block';
+        })
+        .catch(err => {
+          alert('Failed to update status.');
+          console.error(err);
+        });
+    }
+
+    function submitComment(itemId) {
+      const input = document.getElementById(`comment-input-${itemId}`);
+      const commentText = input.value.trim();
+      const reporterId = localStorage.getItem('userId');
+
+      if (!commentText || !reporterId) {
+        alert('Error: No comment or missing reporter ID!');
+        return;
+      }
+
+      fetch('/api/addComment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemId, comment: commentText, reporterId: parseInt(reporterId) })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('Comment submitted!');
+          input.value = '';
+          loadItems(); // Refresh to show new comment
+        } else {
+          alert('Failed to submit comment.');
+        }
+      })
+      .catch(err => {
+        alert('Error submitting comment.');
+        console.error(err);
+      });
+    }
+
+    function toggleComments(id) {
+      const commentsDiv = document.getElementById(id);
+      if (commentsDiv.style.display === 'none' || commentsDiv.style.display === '') {
+        commentsDiv.style.display = 'block';
+      } else {
+        commentsDiv.style.display = 'none';
+      }
+    }
+
+    function logout() {
+      localStorage.clear();
+      window.location.href = '/';
+    }
+     (function(){
+    const images = ['cheez1.png', 'cheez2.png', 'cheez3.png'];
+    let currentIndex = 0;
+
+    const popup = document.getElementById('popupAd');
+    const img = document.getElementById('popupAdImage');
+    const closeBtn = document.getElementById('closePopupBtn');
+
+    // Cycle images every 3 seconds
+    const cycleInterval = setInterval(() => {
+      currentIndex = (currentIndex + 1) % images.length;
+      img.src = images[currentIndex];
+    }, 3000);
+
+    // Close button hides the popup and stops cycling
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      popup.style.display = 'none';
+      clearInterval(cycleInterval);
+    });
+  })();
+    // Load on page load
+    loadItems();
+  </script>
+</body>
+</html>

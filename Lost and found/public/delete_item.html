@@ -1,0 +1,32 @@
+<html lang="en">
+<head><title>Delete Item</title><link rel="stylesheet" href="style.css"></head>
+<body>
+  <nav>
+  <div style="display: flex; align-items: center; padding: 10px 20px; background-color: #006400;">
+    <img src="DLSL_Official_logo.png" alt="DLSL Logo" style="height: 50px; margin-right: 15px;">
+    <h2 style="color: white; margin: 0;">Lost & Found Tracker</h2>
+  </div>
+</nav>
+  <section>
+    <h2>Delete Item</h2>
+    <input type="number" id="deleteId" placeholder="Enter Item ID">
+    <button onclick="deleteItem()">Delete</button>
+    <div id="deleteStatus"></div>
+  </section>
+  <script>
+    function deleteItem() {
+      const id = document.getElementById('deleteId').value;
+      fetch(`/api/item/${id}`, {
+        method: 'DELETE'
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('deleteStatus').innerText = 'Item deleted successfully!';
+      })
+      .catch(err => {
+        document.getElementById('deleteStatus').innerText = 'Error deleting item.';
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Report Lost Item</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="user_style.css" />
+</head>
+<body>
+  <nav>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px 20px; background-color: #006400;">
+      
+      <!-- Left: Logo + Title -->
+      <div style="display: flex; align-items: center; flex: 1 1 200px; min-width: 200px;">
+        <img src="DLSL_Official_logo.png" alt="DLSL Logo" style="height: 50px; margin-right: 15px;">
+        <h2 style="color: white; margin: 0; font-size: 20px;">Welcome to DLSL Lost & Found Tracker</h2>
+      </div>
+  
+  
+     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 20px; height: 55px;" >
+        <img src="avatar.png" alt="Avatar Logo" style="height: 50px;">
+        <h id="usernameDisplay" style="font-weight: bold; color: #ffffff; margin-bottom: auto;">User</h1>    
+      </div>
+      <div style="position: sticky;" >
+        <h1 style="color: white; margin: 0; cursor: pointer;" class="logout-btn" onclick="logout()">Log out</h1>        
+      </div>
+  
+    </div>
+  </nav>
+
+<section style="position: relative;">
+  <a href="user.html"><button style="position: absolute; font-weight: bolder; width: 140px; margin-top: -20px; margin-left: -20px;">Back to Home</button></a>
+  <h2>Report a Lost Item</h2>
+  <form onsubmit="submitLostItem(event)" style="font-weight: bold;">
+    <label>Item Name:</label>
+    <input type="text" id="name" required />
+
+    <label>Location Lost:</label>
+    <input type="text" id="location" required />
+
+    <label>Date:</label>
+    <input type="date" id="date" required />
+
+    <label>Description:</label>
+    <textarea id="description" required></textarea>
+    
+    <label >Upload Item Image:</label>
+    <input type="file" id="image" accept="image/*" />
+    <br>
+    <img id="imagePreview" style="max-width: 300px; max-height: 300px; margin-top: 10px; display: block; margin-left: auto; margin-right: auto;" />
+
+    <button type="submit">Submit Lost Report</button>
+  </form>
+</section>
+
+<script>
+document.getElementById('image').addEventListener('change', function (event) {
+  const file = event.target.files[0];
+  const preview = document.getElementById('imagePreview');
+
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    preview.style.display = 'none';
+  }
+});
+const username = localStorage.getItem('username');
+    if (username) {
+    document.getElementById('usernameDisplay').textContent = username;
+    }
+function submitLostItem(event) {
+  event.preventDefault();
+
+
+  const formData = new FormData();
+  formData.append('name', document.getElementById('name').value);
+  formData.append('location', document.getElementById('location').value);
+  formData.append('date', document.getElementById('date').value);
+  formData.append('description', document.getElementById('description').value);
+  formData.append('image', document.getElementById('image').files[0]);
+  formData.append('username', username);
+
+  fetch('/api/report-lost', {
+    method: 'POST',
+    body: formData
+  })
+    .then(res => res.json())
+    .then(data => {
+      alert('Lost item reported successfully!');
+      window.location.reload();
+    })
+    .catch(err => {
+      alert('Error submitting item.');
+      console.error(err);
+    });
+}
+function logout() {
+        if (confirm('Are you sure you want to log out?')) {
+             localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    }
+
+    if (document.referrer === "" || localStorage.length === 0) {
+    window.location.href = "/index.html"; // or just "/"
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DLSL Lost & Found Dashboard</title>
+    <link rel="stylesheet" href="user_style.css" />
+</head>
+<body>
+
+    <div id="popupAd1" style="
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 280px;
+  height: 220px;
+  background-color: #f9f9f9;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 1100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  font-family: Arial, sans-serif;
+">
+  <button id="closePopupBtn1" style="
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #ccc;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+    line-height: 1;
+  " title="Close">&times;</button>
+  <img id="popupAdImage1" src="cheez1.png" alt="Ad Image" style="max-width: 90%; max-height: 90%; object-fit: contain; border-radius: 12px;">
+</div>
+    <!-- Navigation -->
+    <nav>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; padding: 10px 20px; background-color: #006400;">
+      
+      <!-- Left: Logo + Title -->
+      <div style="display: flex; align-items: center; flex: 1 1 200px; min-width: 200px;">
+        <img src="DLSL_Official_logo.png" alt="DLSL Logo" style="height: 50px; margin-right: 15px;">
+        <h2 style="color: white; margin: 0; font-size: 20px;">Welcome to DLSL Lost & Found Tracker</h2>
+      </div>
+  
+  
+     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-right: 20px; height: 55px;" >
+        <img src="avatar.png" alt="Avatar Logo" style="height: 50px;">
+        <h id="usernameDisplay" style="font-weight: bold; color: #ffffff; margin-bottom: auto;">User</h1>    
+      </div>
+      <div style="position: sticky;" >
+        <h1 style="color: white; margin: 0; cursor: pointer;" class="logout-btn" onclick="logout()">Log out</h1>        
+      </div>
+  
+    </div>
+  </nav>
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Dashboard Cards -->
+        <div class="cards-grid">            
+
+            <!-- Report Lost Item Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon green">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Report Lost Item</h3>
+                    <p class="card-description">Quickly report a lost item with detailed information and location</p>
+                </div>
+                <div class="card-content">
+                    <a href="report_lost.html" class="action-btn green">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10,9 9,9 8,9"/>
+                        </svg>
+                        Report Lost
+                    </a>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon orange">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22,4 12,14.01 9,11.01"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Report Found Item</h3>
+                    <p class="card-description">Help reunite lost items with their owners by reporting found items</p>
+                </div>
+                <div class="card-content">
+                    <a href="report_found.html" class="action-btn orange">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        Report Found
+                    </a>
+                </div>
+            </div>
+
+            <!-- Search Items Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon cyan">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                    </div>
+                    <h3 class="card-title">Browse</h3>
+                    <p class="card-description">Browse all reported items by types or status</p>
+                </div>
+                <div class="card-content">
+                    <a href="view_items.html" class="action-btn cyan" style="margin-top: 20px;">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        View All Items
+                    </a>
+                </div>
+            </div>
+
+            <div class="card" style="width: 1170px; height: 1px; background: linear-gradient(135deg, #ececec 0%, #ebebeb 50%, #dfdfdf 100%);">
+                <div class="card-content">
+                    <div class="stats-grid">
+                        <div class="stat-item red">
+                            <div class="stat-number" id="totalLost">0</div>
+                            <div class="stat-label">Total Lost Reports</div>
+                        </div>
+                        <div class="stat-item green">
+                            <div class="stat-number" id="totalFound">0</div>
+                            <div class="stat-label">Items Found</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <!-- Recent Reports Section -->
+        <div class="recent-reports">
+            <div class="recent-header">
+                <h3 class="recent-title">
+                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12,6 12,12 16,14"/>
+                    </svg>
+                    Recent Reports
+                </h3>
+                <p class="recent-subtitle">Latest reported items</p>
+            </div>
+            <div class="reports-list" id="recentReportsList">
+                <!-- Reports will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+<script>
+        
+    // Initialize dashboard
+    function initDashboard() {
+        
+        fetch('/api/items')
+  .then(res => res.json())
+  .then(data => {
+    const items = data.items; // Access the wrapped items array
+    updateStats(items);
+    displayRecentReports(items);
+  })
+  .catch(err => {
+    console.error('Error fetching items:', err);
+  });
+    }
+
+    // Update Lost/Found statistics
+    function updateStats(items) {
+        const lostItems = items.filter(item => item.status.toLowerCase() === "lost");
+        const foundItems = items.filter(item => item.status.toLowerCase() === "found");
+
+        document.getElementById('totalLost').textContent = lostItems.length;
+        document.getElementById('totalFound').textContent = foundItems.length;
+    }
+
+    // Display the 5 most recent reports
+    function displayRecentReports(items) {
+        const recentList = document.getElementById('recentReportsList');
+        const sortedItems = items
+            .sort((a, b) => new Date(b.date) - new Date(a.date))
+            .slice(0, 5);
+
+        recentList.innerHTML = '';
+
+        sortedItems.forEach(item => {
+            const reportItem = document.createElement('div');
+            reportItem.className = 'report-item';
+
+            reportItem.innerHTML = `
+                <div class="report-image">
+                    ${
+                        item.image
+                        ? `<img src="${item.image}" alt="${item.name}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">`
+                        : `<svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: #9ca3af;">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>`
+                    }
+                </div>
+                <div class="report-info">
+                    <div class="report-name">${item.name}</div>
+                    <div class="report-details">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                            <circle cx="12" cy="10" r="3"/>
+                        </svg>
+                        ${item.location} — ${item.date}
+                    </div>
+                
+                <span 
+    class="status-badge"
+    style="font-weight: bold; color: ${
+        item.status.toLowerCase() === 'claimed' ? 'green' :
+        item.status.toLowerCase() === 'unclaimed' ? 'red' :
+        item.status.toLowerCase() === 'open' ? 'gold' :
+        'gray'
+    };">
+    ${item.status}
+</span>
+            `;
+
+            recentList.appendChild(reportItem);
+        });
+    }
+
+    // Logout function
+    function logout() {
+        if (confirm('Are you sure you want to log out?')) {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+    }
+
+    // Initialize dashboard when DOM is ready
+    document.addEventListener('DOMContentLoaded', initDashboard);
+    const username = localStorage.getItem('username');
+    if (username) {
+    document.getElementById('usernameDisplay').textContent = username;
+    }
+
+    if (document.referrer === "" || localStorage.length === 0) {
+    window.location.href = "/index.html"; 
+  }
+  (function(){
+    const images1 = ['cheez1.png', 'cheez2.png', 'cheez3.png'];
+    let currentIndex1 = 0;
+
+    const popup1 = document.getElementById('popupAd1');
+    const img1 = document.getElementById('popupAdImage1');
+    const closeBtn1 = document.getElementById('closePopupBtn1');
+
+    const cycleInterval1 = setInterval(() => {
+      currentIndex1 = (currentIndex1 + 1) % images1.length;
+      img1.src = images1[currentIndex1];
+    }, 3000);
+
+    closeBtn1.addEventListener('click', (e) => {
+      e.stopPropagation();
+      popup1.style.display = 'none';
+      clearInterval(cycleInterval1);
+    });
+  })();
+</script>
+
+</body>
+</html>
